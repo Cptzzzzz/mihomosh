@@ -1,6 +1,7 @@
 pub mod config;
 pub mod connection;
 pub mod control;
+pub mod init;
 pub mod inspect;
 pub mod profile;
 pub mod proxy;

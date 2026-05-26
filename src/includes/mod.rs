@@ -1,5 +1,7 @@
 pub const DEFAULT_CONFIG_TEMPLATE: &str = include_str!("./default_config.yaml");
 
+pub const DEFAULT_MIHOMO_CONFIG_TEMPLATE: &str = include_str!("./default_mihomo_config.yaml");
+
 pub const DEFAULT_PROFILE_TEMPLATE: &str = include_str!("./default_profile.yaml");
 
 pub const DEFAULT_EXTEND_CONFIG_TEMPLATE: &str = include_str!("./default_extend_config.yaml");

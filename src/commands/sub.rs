@@ -7,7 +7,7 @@ use url::Url;
 
 use crate::{models::config::Config, println_success};
 
-const SUBSCRIPTION_SECTIONS: [&str; 3] = ["proxies", "proxy-groups", "rules"];
+pub(crate) const SUBSCRIPTION_SECTIONS: [&str; 3] = ["proxies", "proxy-groups", "rules"];
 
 pub async fn handle_sub(url: Url) -> Result<()> {
     let cfg = Config::get_instance();
@@ -24,11 +24,9 @@ pub async fn handle_sub(url: Url) -> Result<()> {
         bail!("Current Mihomo config must be a YAML object");
     }
 
-    let subscription = fetch_meta_subscription(url)
+    let subscription = fetch_meta_subscription_config(url)
         .await
         .context("Fail to fetch subscription")?;
-    let subscription = serde_yml::from_str::<Value>(&subscription)
-        .context("Fail to parse subscription as Mihomo config")?;
 
     let data = replace_subscription_sections(&current, &subscription)
         .context("Fail to merge subscription into current Mihomo config")?;
@@ -48,6 +46,11 @@ pub async fn handle_sub(url: Url) -> Result<()> {
 
     println_success!("Subscription applied to Mihomo");
     Ok(())
+}
+
+pub(crate) async fn fetch_meta_subscription_config(url: Url) -> Result<Value> {
+    let data = fetch_meta_subscription(url).await?;
+    serde_yml::from_str::<Value>(&data).context("Fail to parse subscription as Mihomo config")
 }
 
 async fn fetch_meta_subscription(url: Url) -> Result<String> {
@@ -90,7 +93,7 @@ fn make_meta_url(mut url: Url) -> Url {
     url
 }
 
-fn replace_subscription_sections(current: &str, subscription: &Value) -> Result<String> {
+pub(crate) fn replace_subscription_sections(current: &str, subscription: &Value) -> Result<String> {
     let subscription = subscription
         .as_mapping()
         .ok_or_else(|| anyhow!("Subscription config must be a YAML object"))?;

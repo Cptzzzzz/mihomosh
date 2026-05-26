@@ -50,6 +50,12 @@ pub enum Args {
     #[command(subcommand)]
     RuleSet(RuleSetArgs),
 
+    /// Install and initialize Mihomo
+    Init {
+        /// Subscription URL to apply after initialization
+        url: Option<Url>,
+    },
+
     /// Apply a remote subscription to Mihomo
     Sub {
         /// Subscription URL
