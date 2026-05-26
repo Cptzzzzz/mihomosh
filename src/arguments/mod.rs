@@ -13,6 +13,7 @@ use crate::arguments::{
     config::ConfigArgs, connection::ConnectionArgs, control::ControlArgs, inspect::InspectArgs,
     profile::ProfileArgs, proxy::ProxyArgs, rule_set::RuleSetArgs,
 };
+use url::Url;
 
 /// A Command Line Interface for Mihomo
 #[derive(Parser)]
@@ -48,6 +49,12 @@ pub enum Args {
     /// Print/Update rule sets
     #[command(subcommand)]
     RuleSet(RuleSetArgs),
+
+    /// Apply a remote subscription to Mihomo
+    Sub {
+        /// Subscription URL
+        url: Url,
+    },
 
     /// Generate shell completion
     ShellCompletion {
